@@ -12,7 +12,10 @@ include_once("../config/db_connect.php");
   <?php
   if ($conn) {
       echo "<p>✅ Database connection successful!</p>";
+  } else {
+      echo "<p>❌ Database connection failed!</p>";
   }
   ?>
 </body>
 </html>
+

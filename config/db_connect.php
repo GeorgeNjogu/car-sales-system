@@ -1,7 +1,11 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $host = "localhost";
-$user = "root";      // the username you created
-$pass = "";   // the password you set
+$user = "car_useer";      // the username you created
+$pass = "Jazz2015#";   // the password you set
 $db   = "car_sales_db";  // your database name
 
 // Create connection
