@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $host = "localhost";
-$user = "car_useer";      // the username you created
+$user = "car_user";      // the username you created
 $pass = "Jazz2015#";   // the password you set
 $db   = "car_sales_db";  // your database name
 
