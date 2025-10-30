@@ -15,10 +15,12 @@ $conf['db_pass'] = $_ENV['DB_PASS'] ?? "1234";
 $conf['db_name'] = $_ENV['DB_NAME'] ?? "car_sales";
 
 // Email configuration - Use environment variables for security
-$conf['smtp_host'] = $_ENV['SMTP_HOST'] ?? "smtp.gmail.com";
-$conf['smtp_username'] = $_ENV['SMTP_USER'] ?? "lavendagrace80@gmail.com";
-$conf['smtp_password'] = $_ENV['SMTP_PASS'] ?? "";
-$conf['smtp_port'] = $_ENV['SMTP_PORT'] ?? 465;
+
+$conf['smtp_host'] = "smtp.gmail.com";
+$conf['smtp_username'] = "youremail@gmail.com";
+$conf['smtp_password'] = "your_gmail_app_password"; 
+$conf['smtp_port'] = 465;
+
 
 return $conf;
 ?>
