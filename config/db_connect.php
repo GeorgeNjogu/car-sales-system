@@ -1,21 +1,18 @@
 <?php
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$host = "localhost";
-$user = "car_useer";      // the username you created
-$pass = "Jazz2015#";   // the password you set
-$db   = "car_sales_db";  // your database name
+$host = 'localhost:3303';
+$port = 3303;                 // change only if your MySQL uses another port
+$username = 'root';           // or your MySQL user
+$password = 'Jazz2015#';               // your MySQL password
+$database = 'car_sales_db';
 
-// Create connection
-$conn = new mysqli($host, $user, $pass, $db);
+$conn = new mysqli($host, $username, $password, $database, $port);
 
-// Check connection
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
-} else {
-    // Optional success message
-    // echo "✅ Connected successfully to car_sales_db";
 }
+// echo "✅ DB connected";
 ?>
+
