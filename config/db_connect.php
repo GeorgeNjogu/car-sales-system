@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$host = 'localhost:3303';
+$host = '127.0.0.1:3303';
 $port = 3303;                 // change only if your MySQL uses another port
 $username = 'root';           // or your MySQL user
 $password = 'Jazz2015';               // your MySQL password

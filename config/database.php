@@ -1,8 +1,8 @@
 <?php
-$host = 'localhost:3303';
+$host = '127.0.0.1:3303';
 $port = 3303;
 $user = 'root'; // change if your MySQL user is different
-$pass = 'Jazz2015#';     // enter your MySQL password if you have one
+$pass = 'Jazz2015';     // enter your MySQL password if you have one
 $dbname = 'car_sales_db'; // we’ll create this next
 
 try {
