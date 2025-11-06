@@ -1,7 +1,7 @@
 <?php
 session_start();
-include_once("../config/db.connection.php");
-include_once("../services/TwoFactorAuth.php");
+include_once(__DIR__ . '/db.connection.php');
+include_once(__DIR__ . '/../services/TwoFactorAuth.php');
 
 $error = '';
 $message = '';
@@ -17,13 +17,25 @@ $twoFA = new TwoFactorAuth($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $otp = trim($_POST['otp']);
-    if ($twoFA->verifyOTP($userId, $otp, $sessionId)) {
-        $message = '2FA verification successful! Redirecting to your dashboard...';
-        // Redirect based on role
-        $role = $_SESSION['role'];
-        echo "<script>setTimeout(function(){ window.location.href = '../users/" . $role . "s/dashboard.php'; }, 2000);</script>";
+    // Use otp_codes table for verification
+    $stmt = $conn->prepare("SELECT otp_id, otp_code, expires_at, used FROM otp_codes WHERE user_id = ? AND used = 0 ORDER BY created_at DESC LIMIT 1");
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        if ($row['otp_code'] === $otp && strtotime($row['expires_at']) > time()) {
+            // Mark OTP as used
+            $update = $conn->prepare("UPDATE otp_codes SET used = 1 WHERE otp_id = ?");
+            $update->bind_param('i', $row['otp_id']);
+            $update->execute();
+            $message = '2FA verification successful! Redirecting to your dashboard...';
+            $role = $_SESSION['role'];
+            echo "<script>setTimeout(function(){ window.location.href = '../users/" . $role . "s/dashboard.php'; }, 2000);</script>";
+        } else {
+            $error = 'Invalid or expired OTP. Please try again.';
+        }
     } else {
-        $error = 'Invalid or expired OTP. Please try again.';
+        $error = 'No valid OTP found. Please request a new code.';
     }
 }
 ?>

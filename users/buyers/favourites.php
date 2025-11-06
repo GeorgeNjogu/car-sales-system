@@ -23,7 +23,7 @@ if (isset($_GET['add'])) {
         $stmt->bind_param("ii", $buyerId, $carId);
         $stmt->execute();
     }
-    header("Location: my_favorites.php");
+    header("Location: favourites.php");
     exit;
 }
 
@@ -32,7 +32,7 @@ if (isset($_GET['remove'])) {
     $stmt = $conn->prepare("DELETE FROM favorites WHERE buyer_id = ? AND car_id = ?");
     $stmt->bind_param("ii", $buyerId, $carId);
     $stmt->execute();
-    header("Location: my_favorites.php");
+    header("Location: favourites.php");
     exit;
 }
 
@@ -199,11 +199,10 @@ $result = $stmt->get_result();
     <div class="header">
         <h1>My Favorite Cars</h1>
         <div class="nav-links">
-            <a href="browse_cars.php">Browse Cars</a>
-            <a href="my_favorites.php">My Favorites</a>
-            <a href="my_messages.php">Messages</a>
-            <a href="../security_settings.php">Security Settings</a>
-            <a href="../auth/logout.php">Logout</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="favourites.php">My Favorites</a>
+            <a href="messages.php">Messages</a>
+            <a href="../../auth/logout.php">Logout</a>
         </div>
     </div>
 
@@ -235,9 +234,9 @@ $result = $stmt->get_result();
                             Added to favorites: <?php echo date('M j, Y', strtotime($row['favorited_at'])); ?>
                         </div>
                         <div class="car-actions">
-                            <a href="view.car.php?id=<?php echo $row['car_id']; ?>" class="view-btn">View Details</a>
-                            <a href="contact_seller.php?id=<?php echo $row['car_id']; ?>" class="contact-btn">Contact Seller</a>
-                            <a href="my_favorites.php?remove=<?php echo $row['car_id']; ?>" class="remove-btn" onclick="return confirm('Remove from favorites?')">Remove</a>
+                            <a href="viewcars.php?id=<?php echo $row['car_id']; ?>" class="view-btn">View Details</a>
+                            <a href="messages.php?seller_id=<?php echo $row['seller_id']; ?>&car_id=<?php echo $row['car_id']; ?>" class="contact-btn">Contact Seller</a>
+                            <a href="favourites.php?remove=<?php echo $row['car_id']; ?>" class="remove-btn" onclick="return confirm('Remove from favorites?')">Remove</a>
                         </div>
                     </div>
                 </div>

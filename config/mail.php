@@ -1,7 +1,5 @@
 <?php
 // SMTP configuration for sending OTP emails
-// Fill these with your email provider/app password details
-
 // Enable SMTP sending via PHPMailer
 define('SMTP_ENABLED', true);
 
@@ -12,7 +10,7 @@ define('SMTP_ENCRYPTION', 'tls'); // 'tls' or 'ssl'
 
 // Credentials
 define('SMTP_USERNAME', 'lavendagrace80@gmail.com');
-define('SMTP_PASSWORD', ' ################# '); // 16-char app password
+define('SMTP_PASSWORD', ' ################# '); // app password
 
 // From details
 define('MAIL_FROM_EMAIL', 'lavendagrace80@gmail.com');

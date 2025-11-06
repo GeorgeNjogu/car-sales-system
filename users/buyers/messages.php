@@ -201,11 +201,10 @@ $conversations = $stmt->get_result();
     <div class="header">
         <h1>My Messages</h1>
         <div class="nav-links">
-            <a href="browse_cars.php">Browse Cars</a>
-            <a href="my_favorites.php">My Favorites</a>
-            <a href="my_messages.php">Messages</a>
-            <a href="../security_settings.php">Security Settings</a>
-            <a href="../auth/logout.php">Logout</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="favourites.php">My Favorites</a>
+            <a href="messages.php">Messages</a>
+            <a href="../../auth/logout.php">Logout</a>
         </div>
     </div>
 
@@ -221,7 +220,7 @@ $conversations = $stmt->get_result();
         <div class="empty-state">
             <h3>No Messages Yet</h3>
             <p>You haven't started any conversations with sellers yet. Browse cars and contact sellers to get started!</p>
-            <a href="browse_cars.php">Browse Cars</a>
+            <a href="dashboard.php">Go to Dashboard</a>
         </div>
     <?php else: ?>
         <div class="conversations-list">

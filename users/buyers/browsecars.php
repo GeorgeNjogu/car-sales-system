@@ -1,4 +1,5 @@
 <?php
+// Show all errors for debugging
 session_start();
 include_once(__DIR__ . "/../../config/db.connection.php");
 
@@ -19,7 +20,7 @@ $condition = isset($_GET['condition']) ? $_GET['condition'] : '';
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Build query with filters
-$whereConditions = ["status = 'approved'"];
+$whereConditions = ["c.status = 'approved'"];
 $params = [];
 $types = '';
 

@@ -1,15 +1,15 @@
 <?php
 require_once 'Classes.php';
-require_once 'config.php';
+require_once __DIR__ . '/config/config.php';
 
-$conf = include('config.php');
+$conf = include(__DIR__ . '/config/config.php');
 $db = new Database($conf);
 $connection = $db->getConnection();
 
 // Create tables if they don't exist
 $connection->exec("
     CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
@@ -25,7 +25,7 @@ $connection->exec("
         code VARCHAR(6) NOT NULL,
         expires_at TIMESTAMP NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     )
 ");
 

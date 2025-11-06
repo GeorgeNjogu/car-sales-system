@@ -23,6 +23,7 @@ if ($conn->query($sql) === TRUE) {
 $conn->select_db($dbname);
 
 // USERS TABLE
+// USERS TABLE
 $conn->query("CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -31,11 +32,26 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     role ENUM('admin', 'seller', 'buyer') NOT NULL DEFAULT 'buyer',
     status ENUM('active', 'suspended') DEFAULT 'active',
+    otp_code VARCHAR(10) DEFAULT NULL,
+    otp_expires_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 if ($conn->error) {
     die("Error creating users table: " . $conn->error);
+}
+
+$conn->query("CREATE TABLE IF NOT EXISTS otp_codes (
+    otp_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    otp_code VARCHAR(10) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+)");
+if ($conn->error) {
+    die("Error creating otp_codes table: " . $conn->error);
 }
 
 // CARS TABLE

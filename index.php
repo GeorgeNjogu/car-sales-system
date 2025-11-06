@@ -75,7 +75,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     <h1>Welcome to Car Management System</h1>
     <p>Please login or register to continue</p>
 
-    <a href="auth/login.php">Login</a>
+    <a href="../login.php">Login</a>
     <a href="auth/register.php">Register</a>
 </div>
 

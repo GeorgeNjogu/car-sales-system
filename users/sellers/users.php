@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("config/db_connect.php");
+include(__DIR__ . '/../../config/db_connect.php');
 
 // Restrict access if not logged in
 if (!isset($_SESSION['username'])) {

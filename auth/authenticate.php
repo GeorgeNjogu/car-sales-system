@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once __DIR__ . '/config/db_connect.php';
@@ -16,7 +17,7 @@ if ($username === '' || $password === '') {
     exit;
 }
 
-// NOTE: we inserted an admin using MD5 earlier. We'll check MD5 here.
+
 // Preferably you should use password_hash() in production.
 $sql = "SELECT user_id, username, password, role FROM users WHERE username = ? LIMIT 1";
 $stmt = $conn->prepare($sql);

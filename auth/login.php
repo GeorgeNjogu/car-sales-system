@@ -1,9 +1,9 @@
 <?php
 session_start();
 include_once("../config/db.connection.php");
-include_once("../services/TwoFactorAuth.php");
+include_once(__DIR__ . '/../services/TwoFactorAuth.php');
 
-$twoFA = new TwoFactorAuth($conn);
+$twoFA = new TwoFactorAuth();
 $error = '';
 $showOTPForm = false;
 
@@ -20,23 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $result->fetch_assoc();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            // Check if 2FA is enabled
-            if ($twoFA->is2FAEnabled($user['user_id'])) {
-                // Send OTP and show OTP form
-                $sessionId = $twoFA->sendOTP($user['user_id']);
-                if ($sessionId) {
-                    $_SESSION['temp_user_id'] = $user['user_id'];
-                    $_SESSION['temp_role'] = $user['role'];
-                    $_SESSION['temp_session_id'] = $sessionId;
-                    $showOTPForm = true;
-                } else {
-                    $error = "Failed to send verification code. Please try again.";
-                }
+            // Send OTP and show OTP form
+            $otp = $twoFA->generateOTP();
+            $_SESSION['otp_code'] = $otp;
+            $_SESSION['otp_expires'] = time() + 300; // 5 minutes expiry
+            $_SESSION['temp_user_id'] = $user['user_id'];
+            $_SESSION['temp_role'] = $user['role'];
+            if ($twoFA->sendOTP($user['email'], $otp)) {
+                $showOTPForm = true;
             } else {
-                // No 2FA, proceed with normal login
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['role'] = $user['role'];
-                redirectUser($user['role']);
+                $error = "Failed to send verification code. Please try again.";
             }
         } else {
             $error = "Invalid credentials.";
@@ -44,22 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (isset($_POST['otp_code'])) {
         // OTP verification
         $otpCode = $_POST['otp_code'];
-        $userId = $_SESSION['temp_user_id'];
-        $sessionId = $_SESSION['temp_session_id'];
-
-        if ($twoFA->verifyOTP($userId, $otpCode, $sessionId)) {
+        if ($twoFA->verifyOTP($otpCode)) {
             // OTP verified, complete login
-            $_SESSION['user_id'] = $userId;
+            $_SESSION['user_id'] = $_SESSION['temp_user_id'];
             $_SESSION['role'] = $_SESSION['temp_role'];
-            
             // Clean up temp session
             unset($_SESSION['temp_user_id']);
             unset($_SESSION['temp_role']);
-            unset($_SESSION['temp_session_id']);
-            
+            unset($_SESSION['otp_code']);
+            unset($_SESSION['otp_expires']);
             redirectUser($_SESSION['role']);
         } else {
-            $error = "Invalid verification code.";
+            $error = "Invalid or expired verification code.";
             $showOTPForm = true;
         }
     }

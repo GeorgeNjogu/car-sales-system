@@ -1,5 +1,5 @@
 <?php
-require_once 'Classes.php';
+require_once __DIR__ . '/../Classes.php';
 require_once 'config.php';
 
 $conf = include('config.php');

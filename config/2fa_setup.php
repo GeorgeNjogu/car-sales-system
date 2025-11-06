@@ -2,16 +2,21 @@
 // 2FA Setup Script - Run this once to add 2FA support to existing database
 include_once("db.connection.php");
 
-// Add 2FA columns to users table
-$sql = "ALTER TABLE users 
-        ADD COLUMN two_factor_secret VARCHAR(32) DEFAULT NULL,
-        ADD COLUMN two_factor_enabled BOOLEAN DEFAULT FALSE,
-        ADD COLUMN backup_codes TEXT DEFAULT NULL";
 
-if ($conn->query($sql) === TRUE) {
-    echo "2FA columns added successfully to users table.<br>";
+// Add 2FA columns to users table only if they don't exist
+$result = $conn->query("SHOW COLUMNS FROM users LIKE 'two_factor_secret'");
+if ($result && $result->num_rows == 0) {
+    $sql = "ALTER TABLE users 
+            ADD COLUMN two_factor_secret VARCHAR(32) DEFAULT NULL,
+            ADD COLUMN two_factor_enabled BOOLEAN DEFAULT FALSE,
+            ADD COLUMN backup_codes TEXT DEFAULT NULL";
+    if ($conn->query($sql) === TRUE) {
+        echo "2FA columns added successfully to users table.<br>";
+    } else {
+        echo "Error adding 2FA columns: " . $conn->error . "<br>";
+    }
 } else {
-    echo "Error adding 2FA columns: " . $conn->error . "<br>";
+    echo "2FA columns already exist in users table.<br>";
 }
 
 // Create 2FA sessions table for temporary storage

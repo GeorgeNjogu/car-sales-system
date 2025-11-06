@@ -23,8 +23,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'buyer') {
     <h2>Welcome, Buyer!</h2>
     <p>Use the links below to browse and manage your cars:</p>
     <a href="browse_cars.php">Browse Cars</a>
-    <a href="my_favorites.php">My Favorites</a>
-    <a href="my_messages.php">My Messages</a>
+    <a href="favourites.php">My Favorites</a>
+    <a href="messages.php">My Messages</a>
     <a href="../../auth/login.php">Login</a>
     <a href="../../auth/register.php">Register New User</a>
     <a href="../../auth/logout.php">Logout</a>

@@ -1,3 +1,7 @@
+// The following error reporting lines were intended to be removed if they existed:
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 <?php
 class ClassAutoLoad {
     public function __construct() {

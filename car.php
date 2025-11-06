@@ -4,7 +4,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-$conf = include('config.php');
+$conf = include(__DIR__ . '/config/config.php');
+
 
 if ($_POST) {
     $customerName = $_POST['customer_name'];

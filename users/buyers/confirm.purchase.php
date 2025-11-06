@@ -243,8 +243,14 @@ function sendPurchaseNotification($sellerEmail, $sellerName, $carDetails, $confi
 
     <?php if ($message): ?>
         <div class="message success"><?php echo htmlspecialchars($message); ?></div>
+        <!-- M-Pesa Payment Button -->
+        <form method="POST" action="/car-sales-system/mpesa_stkpush.php" style="margin-top:20px;">
+            <input type="hidden" name="amount" value="<?php echo isset($purchasePrice) ? htmlspecialchars($purchasePrice) : htmlspecialchars($car['price']); ?>">
+            <label for="mpesa_phone"><strong>Enter your M-Pesa phone number:</strong></label>
+            <input type="text" name="phone" id="mpesa_phone" placeholder="2547XXXXXXXX" required style="margin:10px 0; padding:8px; width:220px;">
+            <button type="submit" style="background:#25d366; color:white; padding:10px 20px; border:none; border-radius:4px; cursor:pointer;">Pay with M-Pesa</button>
+        </form>
     <?php endif; ?>
-    
     <?php if ($error): ?>
         <div class="message error"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
