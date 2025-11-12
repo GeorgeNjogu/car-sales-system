@@ -1,7 +1,6 @@
+
 <?php
 session_start();
-
-
 // If user is already logged in, redirect to their dashboard
 if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     switch ($_SESSION['role']) {
@@ -16,6 +15,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             exit;
     }
 }
+include_once __DIR__ . '/includes/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -75,13 +75,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     <h1>Welcome to Car Management System</h1>
     <p>Please login or register to continue</p>
 
-    <a href="../login.php">Login</a>
-    <a href="auth/register.php">Register</a>
+<a href="auth/login.php">Login</a>
+<a href="auth/register.php">Register</a>
 </div>
 
-<footer>
-    &copy; <?php echo date("Y"); ?> Car Management System
-</footer>
+
+<?php include_once __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

@@ -18,7 +18,7 @@ $conf['db_name'] = $_ENV['DB_NAME'] ?? "carsales";
 
 $conf['smtp_host'] = "smtp.gmail.com";
 $conf['smtp_username'] = "lavendagrace80@gmail.com";
-$conf['smtp_password'] = "#################"; //replace with pass. when testing this
+$conf['smtp_password'] = "ifnsqtpjzilhsaso"; //replace with pass. when testing this
 $conf['smtp_port'] = 465;
 
 

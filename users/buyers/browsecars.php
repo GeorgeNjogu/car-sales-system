@@ -282,7 +282,7 @@ while ($row = $makesResult->fetch_assoc()) {
     <div class="header">
         <h1>Browse Available Cars</h1>
         <div class="nav-links">
-            <a href="browse_cars.php">Browse Cars</a>
+            <a href="https://www.autoevolution.com/cars/?utm_source=chatgpt.com" target="_blank">Browse Cars</a>
             <a href="my_favorites.php">My Favorites</a>
             <a href="my_messages.php">Messages</a>
             <a href="../security_settings.php">Security Settings</a>
@@ -400,6 +400,8 @@ while ($row = $makesResult->fetch_assoc()) {
             </div>
         <?php endwhile; ?>
     </div>
+
+    <a href="https://www.autoevolution.com/cars/?utm_source=chatgpt.com" target="_blank" style="display:inline-block;margin:10px 0;padding:10px 20px;background:#007BFF;color:#fff;border-radius:6px;text-decoration:none;">Explore More Cars on AutoEvolution</a>
 </div>
 
 </body>

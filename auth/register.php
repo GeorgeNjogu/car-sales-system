@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include_once("../config/db.connection.php");
 
 $message = '';
@@ -37,15 +39,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['user_id'] = $conn->insert_id;
                 $_SESSION['role'] = $role;
 
-                // Enable 2FA and send OTP
+                // Generate OTP and send to email (same as login)
                 include_once("../services/TwoFactorAuth.php");
-                $twoFA = new TwoFactorAuth($conn);
-                $twoFA->enable2FA($_SESSION['user_id']);
-                $sessionId = $twoFA->sendOTP($_SESSION['user_id']);
-
-                // Redirect to OTP verification page
-                header("Location: ../users/verify_otp.php?session_id=" . urlencode($sessionId));
-                exit;
+                $twoFA = new TwoFactorAuth();
+                $otp = $twoFA->generateOTP();
+                $_SESSION['otp_code'] = $otp;
+                $_SESSION['otp_expires'] = time() + 300; // 5 minutes expiry
+                $_SESSION['temp_user_id'] = $_SESSION['user_id'];
+                $_SESSION['temp_role'] = $role;
+                if ($twoFA->sendOTP($email, $otp)) {
+                    // Redirect to OTP verification page
+                    header("Location: ../users/verify_otp.php");
+                    exit;
+                } else {
+                    $error = "Failed to send verification code. Please try again.";
+                }
             } else {
                 $error = "Error: " . $stmt->error;
             }

@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../../includes/header.php';
 session_start();
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'seller') {
     header('Location: ../../auth/login.php');
@@ -22,11 +23,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'seller') {
 <div class="container">
     <h2>Welcome, Seller!</h2>
     <p>Use the links below to manage your cars:</p>
-    <a href="my_cars.php">My Cars</a>
+    <a href="https://www.autoevolution.com/cars/?utm_source=chatgpt.com" target="_blank">My Cars</a>
     <a href="add_car.php">Add New Car</a>
     <a href="../../auth/login.php">Login</a>
-    <a href="../../auth/register.php">Register New User</a>
     <a href="../../auth/logout.php">Logout</a>
 </div>
+<?php include_once __DIR__ . '/../../includes/footer.php'; ?>
 </body>
 </html>

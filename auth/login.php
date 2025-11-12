@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 include_once("../config/db.connection.php");
 include_once(__DIR__ . '/../services/TwoFactorAuth.php');
@@ -8,7 +10,32 @@ $error = '';
 $showOTPForm = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
+    if (isset($_POST['resend_otp'])) {
+        // Resend OTP logic
+        if (isset($_SESSION['temp_user_id'])) {
+            $stmt = $conn->prepare("SELECT * FROM users WHERE user_id=? LIMIT 1");
+            $stmt->bind_param("i", $_SESSION['temp_user_id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
+            if ($user) {
+                $otp = $twoFA->generateOTP();
+                $_SESSION['otp_code'] = $otp;
+                $_SESSION['otp_expires'] = time() + 300;
+                if ($twoFA->sendOTP($user['email'], $otp)) {
+                    $showOTPForm = true;
+                    $error = "A new verification code has been sent to your email.";
+                } else {
+                    $showOTPForm = true;
+                    $error = "Failed to resend verification code. Please try again.";
+                }
+            } else {
+                $error = "User session expired. Please login again.";
+            }
+        } else {
+            $error = "Session expired. Please login again.";
+        }
+    } elseif (isset($_POST['email']) && isset($_POST['password'])) {
         // Initial login
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -32,6 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error = "Failed to send verification code. Please try again.";
             }
         } else {
+            // If attempted login is for an admin, redirect to forgot password
+            $stmt2 = $conn->prepare("SELECT role FROM users WHERE email=? LIMIT 1");
+            $stmt2->bind_param("s", $email);
+            $stmt2->execute();
+            $res2 = $stmt2->get_result();
+            if ($row2 = $res2->fetch_assoc()) {
+                if ($row2['role'] === 'admin') {
+                    header('Location: ../users/admin/admin_forgot_password.php');
+                    exit;
+                }
+            }
             $error = "Invalid credentials.";
         }
     } elseif (isset($_POST['otp_code'])) {
@@ -55,12 +93,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 function redirectUser($role) {
+    // Always require OTP for all users after login, so only redirect after OTP verification
     switch ($role) {
         case 'admin':
             header("Location: ../users/admin/manage_users.php");
             break;
         case 'seller':
-            header("Location: ../users/sellers/my_cars.php");
+            header("Location: ../users/sellers/dashboard.php");
             break;
         case 'buyer':
             header("Location: ../users/buyers/browse_cars.php");
@@ -152,17 +191,18 @@ function redirectUser($role) {
     <?php endif; ?>
 
     <?php if ($showOTPForm): ?>
-        <h2>Enter Verification Code</h2>
+        <h2>Two-Factor Authentication</h2>
         <div class="otp-info">
-            <p>We've sent a 6-digit verification code to your email address.</p>
-            <p>Please check your email and enter the code below.</p>
+            <p><strong>Step 2 of 2:</strong> For your security, a 6-digit verification code has been sent to your email address.</p>
+            <p>If you do not see the email, check your spam or junk folder.</p>
         </div>
-        
         <form method="POST">
-            <input type="text" name="otp_code" placeholder="Enter 6-digit code" maxlength="6" required><br>
+            <input type="text" name="otp_code" placeholder="Enter 6-digit code" maxlength="6" autocomplete="one-time-code" required><br>
             <button type="submit">Verify Code</button>
         </form>
-        
+        <form method="POST" style="margin-top:10px; text-align:center;">
+            <button type="submit" name="resend_otp" style="background:#28a745;">Resend Code</button>
+        </form>
         <div class="back-link">
             <a href="login.php">Back to Login</a>
         </div>

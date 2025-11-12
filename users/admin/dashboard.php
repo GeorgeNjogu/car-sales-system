@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../../includes/header.php';
 session_start();
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../../auth/login.php');
@@ -45,5 +46,6 @@ $result = $conn->query("SELECT name, email, two_factor_enabled FROM users");
         <?php endwhile; ?>
     </table>
 </div>
+<?php include_once __DIR__ . '/../../includes/footer.php'; ?>
 </body>
 </html>

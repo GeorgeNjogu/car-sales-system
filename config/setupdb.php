@@ -6,6 +6,13 @@ $dbname = "carsales";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, null, 3307);
+$servername = "localhost";
+$username = "root"; 
+$password = "1234";     
+$dbname = "carsales";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, null, 3307);
 
 // Check connection
 if ($conn->connect_error) {
@@ -32,6 +39,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     role ENUM('admin', 'seller', 'buyer') NOT NULL DEFAULT 'buyer',
     status ENUM('active', 'suspended') DEFAULT 'active',
+    two_factor_enabled BOOLEAN DEFAULT 0,
     otp_code VARCHAR(10) DEFAULT NULL,
     otp_expires_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
